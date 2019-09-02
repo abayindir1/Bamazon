@@ -36,7 +36,7 @@ inquirer.prompt([
             addToInventory()
             break;
         case "addNewProduct":
-            // addNewProduct()
+            addNewProduct()
             break;
     }
 });
@@ -93,4 +93,44 @@ function addToInventory() {
             }
         )
     })
+}
+
+function addNewProduct(){
+   inquirer.prompt([
+    {
+        type: "input",
+        name: "productName",
+        message: "Enter the name of the new product.",
+    }
+    ,{
+        type: "input",
+        name: "departmentName",
+        message: "What is the department of the new product?",
+    }
+    ,{
+        type: "input",
+        name: "price",
+        message: "Enter the price of the new item.",
+        filter: Number
+    }
+    ,{
+        type: "input",
+        name: "stockQuantity",
+        message: "how many items to add inventory.",
+        filter: Number
+    }
+   ]).then(function(response){
+    connection.query(
+        "INSERT INTO `bamazon_db`.`products` (`product_name`, `department_name`, `price`, `stock_quantity`) VALUES (?, ?, ?, ?);",
+        [response.productName, response.departmentName, response.price, response.stockQuantity],
+        function(err, result){
+         if (err) {
+             throw err;
+         }
+         console.log("Added!")
+         viewProducts()
+        }
+     )
+   })
+
 }
