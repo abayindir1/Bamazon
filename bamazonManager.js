@@ -1,0 +1,84 @@
+var inquirer = require("inquirer");
+var mysql = require("mysql");
+
+var connection = mysql.createConnection({
+    host: "localhost",
+    port: 3306,
+    user: "root",
+    password: "password",
+    database: "bamazon_db"
+});
+
+connection.connect(function (err) {
+    if (err) throw err;
+});
+
+inquirer.prompt([
+    {
+        type: "list",
+        name: "command",
+        message: "What would you like to do",
+        choices: [{ name: "View Products for Sale", value: "viewProducts" },
+        { name: "View Low Inventory", value: "lowInventory" },
+        { name: "Add to Inventory", value: "addToInventory" },
+        { name: "Add New Product", value: "addNewProduct" }]
+    }
+
+]).then(function (response) {
+    switch (response.command) {
+        case "viewProducts":
+            viewProducts()
+            break;
+        case "lowInventory":
+            viewLowInventory()
+            break;
+        case "addToInventory":
+            addToInventory()
+            break;
+        case "addNewProduct":
+            // addNewProduct()
+            break;
+    }
+});
+
+function viewProducts(){
+    connection.query(
+        "SELECT item_id, product_name, price, stock_quantity FROM products",
+        function (err, results) {
+            if (err) {
+                throw err;
+            }
+            console.table(results);
+        }
+    )
+}
+
+function viewLowInventory(){
+    connection.query(
+        "SELECT * FROM products WHERE stock_quantity < 5",
+        function (err, results) {
+            if (err) {
+                throw err;
+            }
+            console.table(results);
+        }
+    )
+}
+
+function addToInventory(){
+    inquirer.prompt([
+        {
+            type: "input",
+            name: "userInput",
+            message: "Enter the ID of the product you would add item.",
+            filter: Number
+        }
+        ,
+        {
+            type: "input",
+            name: "userUnitInput",
+            message: "How many units would you like to buy?",
+            filter: Number
+        }
+])
+}
