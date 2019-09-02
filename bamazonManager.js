@@ -41,7 +41,7 @@ inquirer.prompt([
     }
 });
 
-function viewProducts(){
+function viewProducts() {
     connection.query(
         "SELECT item_id, product_name, price, stock_quantity FROM products",
         function (err, results) {
@@ -53,7 +53,7 @@ function viewProducts(){
     )
 }
 
-function viewLowInventory(){
+function viewLowInventory() {
     connection.query(
         "SELECT * FROM products WHERE stock_quantity < 5",
         function (err, results) {
@@ -65,7 +65,7 @@ function viewLowInventory(){
     )
 }
 
-function addToInventory(){
+function addToInventory() {
     inquirer.prompt([
         {
             type: "input",
@@ -80,5 +80,17 @@ function addToInventory(){
             message: "How many units would you like to buy?",
             filter: Number
         }
-])
+    ]).then(function (response) {
+        connection.query(
+            "UPDATE products SET stock_quantity = stock_quantity + ? WHERE item_id = ?",
+            [response.userUnitInput, response.userInput],
+            function(err, result){
+                if (err) {
+                    throw err;
+                }
+                console.log("Added!")
+                viewProducts()
+            }
+        )
+    })
 }
