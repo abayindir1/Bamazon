@@ -25,33 +25,42 @@ function showTable() {
     )
 }
 
-    inquirer.prompt([
-        {
-            type: "input",
-            name: "userInput",
-            message: "Enter the ID of the product you would like to buy.",
-            filter: Number
-        }
-        ,
-        {
-            type: "input",
-            name: "userUnitInput",
-            message: "How many units would you like to buy?",
-            filter: Number
-        }
-    ]).then(function (response) {
-        connection.query(
-            "UPDATE products SET stock_quantity = stock_quantity - ? WHERE item_id = ? and stock_quantity >= ?",
-            [response.userUnitInput, response.userInput, response.userUnitInput],
-            function (err, results) {
-                if (err) {
-                    throw err;
-                }
-                if (results.affectedRows === 0) {
-                    console.log("Insufficient quantity!")
-                }
-                showTable()
-
+inquirer.prompt([
+    {
+        type: "input",
+        name: "userInput",
+        message: "Enter the ID of the product you would like to buy.",
+        filter: Number
+    }
+    ,
+    {
+        type: "input",
+        name: "userUnitInput",
+        message: "How many units would you like to buy?",
+        filter: Number
+    }
+]).then(function (response) {
+    connection.query(
+        "UPDATE products SET stock_quantity = stock_quantity - ? WHERE item_id = ? and stock_quantity >= ?",
+        [response.userUnitInput, response.userInput, response.userUnitInput],
+        function (err, results) {
+            if (err) {
+                throw err;
             }
-        )
-    });
+            if (results.affectedRows === 0) {
+                console.log("Insufficient quantity!")
+            } else {
+                connection.query(
+                    "UPDATE products SET product_sales = product_Sales + (price * ?) WHERE item_id = ? ", [response.userUnitInput, response.userInput],
+                    function (err, res) {
+                        if (err) {
+                            throw err;
+                        }
+                    }
+                )
+            }
+            showTable()
+
+        }
+    )
+});
