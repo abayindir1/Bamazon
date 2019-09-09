@@ -12,3 +12,11 @@ The app will take in orders from customers and deplete stock from the store's in
 
 
 
+## Technologies Used
+* JavaScript
+* [Node JS](https://nodejs.org/en/download/)
+* [MySQL](https://dev.mysql.com/doc/refman/5.6/en/installing.html)
+* NPM Packages:
+	- [mysql](https://www.npmjs.com/package/mysql)
+	- [inquirer](https://www.npmjs.com/package/inquirer)
+
