@@ -13,13 +13,13 @@ The app will take in orders from customers and deplete stock from the store's in
 
 ##### 4. For `bamaozonManager.js`, depending on the command you run, the output will change.   
 #### Example
-Pick an option
+Pick an option  
 ![Bamazon Customer](/images/bamazon_manager1.png)  
 ![Bamazon Customer](/images/bamazon_manager2.png)   
 
 ##### 5. For `bamaozonSupervisor.js`, depending on the command you run, the output will change. 
 #### Example
-Pick an option
+Pick an option  
 ![Bamazon Customer](/images/bamazon_supervisor1.png)  
 ![Bamazon Customer](/images/bamazon_supervisor2.png) 
 
